@@ -1,0 +1,60 @@
+<!-- fayl: chat.html -->
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat - Kamronbek's Blog</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    #messages {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #333;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #222;
+      border-radius: 10px;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Chat</h1>
+  <div id="messages"></div>
+  <input id="msgInput" type="text" placeholder="Xabar yozing...">
+  <button onclick="send()">Yuborish</button>
+
+  <script>
+    const msgBox = document.getElementById("messages");
+    const input = document.getElementById("msgInput");
+
+    function send() {
+      const text = input.value;
+      if (text.trim() !== "") {
+        const p = document.createElement("p");
+        p.textContent = "Siz: " + text;
+        msgBox.appendChild(p);
+        input.value = "";
+        msgBox.scrollTop = msgBox.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>

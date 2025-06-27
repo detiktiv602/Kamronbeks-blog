@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Futbol Yangiliklari (Real-time)</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: white; padding: 20px; }
+    .item { margin-bottom: 20px; }
+    .item img { max-width: 100%; height: auto; border-radius: 8px; margin-top:8px; }
+  </style>
+</head>
+<body>
+  <h1>Futbol Yangiliklari</h1>
+  <div id="feed"></div>
+
+  <script>
+    async function loadFeed() {
+      const CORS = 'https://api.allorigins.win/raw?url=';
+      const url = CORS + encodeURIComponent('https://www.90min.com/posts.rss');
+      const resp = await fetch(url);
+      const xmlText = await resp.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(xmlText, "application/xml");
+      const items = xml.querySelectorAll('item');
+      const container = document.getElementById('feed');
+
+      items.forEach((it, i) => {
+        if (i >= 5) return; // faqat 5 ta yangilik
+        const title = it.querySelector('title').textContent;
+        const link = it.querySelector('link').textContent;
+        let img = '';
+        const media = it.querySelector('media\\:content, enclosure');
+        if (media) img = media.getAttribute('url');
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `<h3><a href="${link}" target="_blank">${title}</a></h3>
+          ${img ? `<img src="${img}" alt="">` : ''}`;
+        container.appendChild(div);
+      });
+    }
+    loadFeed().catch(e => {
+      document.getElementById('feed').textContent = 'Yangiliklarni yuklashda muammo bo‘ldi.';
+      console.error(e);
+    });
+  </script>
+</body>
+</html>
